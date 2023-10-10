@@ -1,4 +1,3 @@
-import Header from '@/components/Header'
 import type { Product, ResponseError } from '@/interfaces'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -15,47 +14,38 @@ const fetcher = async (url: string) => {
 }
 
 const Product = () => {
-  const { query } = useRouter()
+  const router = useRouter()
 
   const { data, error, isLoading, isValidating } = useSWR<Product, ResponseError>(
-    () => (query.id ? `https://dummyjson.com/products/${query.id}` : null),
+    () => (router.query.id ? `https://dummyjson.com/products/${router.query.id}` : null),
     fetcher
   )
 
   if (error) {
-    return (
-      <>
-        <Header />
-        <div className="content">{error.message}</div>
-      </>
-    )
+    return <p>{error.message}</p>
   }
 
   if (isLoading) {
-    return (
-      <>
-        <Header />
-        <div className="content">Loading...</div>
-      </>
-    )
+    return <p>Loading...</p>
   }
 
   if (!data) {
-    return (
-      <>
-        <Header />
-        <div className="content">{"Data doesn't exist!"}</div>
-      </>
-    )
+    return <p>{"Data doesn't exist!"}</p>
+  }
+
+  const handleBackButton = () => {
+    router.push('/products')
   }
 
   return (
     <>
-      <Header />
       {isValidating ? (
-        'Validating...'
+        <p>Validating...</p>
       ) : (
-        <div className="content">
+        <>
+          <h3>
+            <span onClick={() => handleBackButton()}>⬅ Go Back</span>
+          </h3>
           <div className="img-container">
             <Image
               src={data.thumbnail}
@@ -73,7 +63,7 @@ const Product = () => {
             <dt>Brand</dt>
             <dd>{data.brand}</dd>
           </dl>
-        </div>
+        </>
       )}
     </>
   )
