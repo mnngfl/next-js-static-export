@@ -1,4 +1,3 @@
-import Header from '@/components/Header'
 import type { Products } from '@/interfaces'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -14,30 +13,15 @@ const Products = () => {
   )
 
   if (error) {
-    return (
-      <>
-        <Header />
-        <div className="content">Failed to load</div>
-      </>
-    )
+    return <p>Failed to load</p>
   }
 
   if (isLoading) {
-    return (
-      <>
-        <Header />
-        <div className="content">Loading...</div>
-      </>
-    )
+    return <p>Loading...</p>
   }
 
   if (!data) {
-    return (
-      <>
-        <Header />
-        <div className="content">{"Data doesn't exist!"}</div>
-      </>
-    )
+    return <p>{"Data doesn't exist!"}</p>
   }
 
   const handleProductClick = (id: number) => {
@@ -46,32 +30,29 @@ const Products = () => {
 
   return (
     <>
-      <Header />
-      <div className="content">
-        <h1>Product List</h1>
-        <div className="card-container">
-          {data.products.map(product => (
-            <div
-              key={product.id}
-              className="card"
-              onClick={() => handleProductClick(product.id)}
-            >
-              <div className="img-container">
-                <Image
-                  src={product.thumbnail}
-                  alt={product.title}
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </div>
-              <div className="txt-container">
-                <p className="title">{product.title}</p>
-                <p>{product.description}</p>
-                <p>${product.price}</p>
-              </div>
+      <h1>Product List</h1>
+      <div className="card-container">
+        {data.products.map(product => (
+          <div
+            key={product.id}
+            className="card"
+            onClick={() => handleProductClick(product.id)}
+          >
+            <div className="img-container">
+              <Image
+                src={product.thumbnail}
+                alt={product.title}
+                layout="fill"
+                objectFit="cover"
+              />
             </div>
-          ))}
-        </div>
+            <div className="txt-container">
+              <p className="title">{product.title}</p>
+              <p>{product.description}</p>
+              <p>${product.price}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </>
   )
