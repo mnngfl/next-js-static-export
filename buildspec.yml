@@ -4,9 +4,9 @@ phases:
   pre_build:
     commands:
       - echo "Installing dependencies ..."
-      - npm install # 종속성 설치
+      - npm ci # 빌드에 필요한 종속성 설치
   build:
-    command:
+    commands:
       - echo "Build Started on `date`"
       - npm run build # Next.js 앱 빌드
 artifacts:
