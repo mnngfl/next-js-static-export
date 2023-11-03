@@ -11,8 +11,8 @@ phases:
       - npm run build
   post_build:
     commands:
-      - aws s3 cp --recursive --acl public-read ./out s3://$BUCKET_NAME/
-      - aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./out/index.html s3://$BUCKET_NAME/
+      - aws s3 cp --recursive ./out s3://$BUCKET_NAME/
+      - aws s3 cp --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./out/index.html s3://$BUCKET_NAME/
       - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths /index.html
 artifacts:
   files:
