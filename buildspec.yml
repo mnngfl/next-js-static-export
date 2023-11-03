@@ -4,12 +4,17 @@ phases:
   pre_build:
     commands:
       - echo Installing dependencies ...
-      - npm ci # 빌드에 필요한 종속성 설치
+      - npm ci
   build:
     commands:
       - echo Build Started on `date`
-      - npm run build # Next.js 앱 빌드
+      - npm run build
+  post_build:
+    commands:
+      - aws s3 cp --recursive --acl public-read ./out s3://$BUCKET_NAME/
+      - aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./out/index.html s3://$BUCKET_NAME/
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths /index.html
 artifacts:
   files:
-    - '**/*' # 빌드된 모든 파일을 아카이브
+    - '**/*'
   base-directry: 'out'
